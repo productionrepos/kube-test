@@ -38,6 +38,6 @@ jobs:
           k8s/deployment.yaml
           k8s/loadbalancer.yaml
         images: |
-          spreadregistry.azurecr.io/k8sdemo:${{ github.sha }}
+          spreadregistry.azurecr.io/react-test:${{ github.sha }}
         imagepullsecrets: |
           demo-k8s-secret
