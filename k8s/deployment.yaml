@@ -17,14 +17,8 @@ spec:
         - name: react-test
           image: spreadregistry.azurecr.io/react-test:v1
           imagePullPolicy: Always
-          readinessProbe:
-            httpGet:
-              port: 8080
-              path: /
-          livenessProbe:
-            httpGet:
-              port: 8080
-              path: /
+          ports:
+          - containerPort: 80
           resources:
             requests:
               memory: "128Mi"
