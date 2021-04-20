@@ -14,8 +14,8 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
     - run: |
-        docker build . -t spreadregistry.azurecr.io/k8sdemo:${{ github.sha }}
-        docker push spreadregistry.azurecr.io/k8sdemo:${{ github.sha }}
+        docker build . -t spreadregistry.azurecr.io/react-test:${{ github.sha }}
+        docker push spreadregistry.azurecr.io/react-test:${{ github.sha }}
     
     # Set the target AKS cluster.
     - uses: Azure/aks-set-context@v1
@@ -35,8 +35,8 @@ jobs:
     - uses: Azure/k8s-deploy@v1.4
       with:
         manifests: |
-          k8s/deployment.yml
-          k8s/service.yml
+          k8s/deployment.yaml
+          k8s/service.yaml
         images: |
           spreadregistry.azurecr.io/k8sdemo:${{ github.sha }}
         imagepullsecrets: |
