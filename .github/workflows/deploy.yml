@@ -1,15 +1,11 @@
-on:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
+on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@master
 
     - uses: Azure/docker-login@v1
       with:
@@ -20,3 +16,28 @@ jobs:
     - run: |
         docker build . -t spreadregistry.azurecr.io/k8sdemo:${{ github.sha }}
         docker push spreadregistry.azurecr.io/k8sdemo:${{ github.sha }}
+    
+    # Set the target AKS cluster.
+    - uses: Azure/aks-set-context@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        cluster-name: kubspread
+        resource-group: spreadkubernetes
+
+    - uses: Azure/k8s-create-secret@v1
+      with:
+        container-registry-url: spreadregistry.azurecr.io
+        container-registry-username: ${{ secrets.REGISTRY_USERNAME }}
+        container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+        secret-name: demo-k8s-secret
+
+
+    - uses: Azure/k8s-deploy@v1.4
+      with:
+        manifests: |
+          manifests/deployment.yml
+          manifests/service.yml
+        images: |
+          spreadregistry.azurecr.io/k8sdemo:${{ github.sha }}
+        imagepullsecrets: |
+          demo-k8s-secret
