@@ -36,7 +36,7 @@ jobs:
       with:
         manifests: |
           k8s/deployment.yaml
-          k8s/service.yaml
+          k8s/loadbalancer.yaml
         images: |
           spreadregistry.azurecr.io/k8sdemo:${{ github.sha }}
         imagepullsecrets: |
