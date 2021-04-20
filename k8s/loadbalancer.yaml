@@ -8,5 +8,4 @@ spec:
     app: react-test
   ports:
   - protocol: TCP
-    port: 81
-    targetPort: 8080
+    port: 80
